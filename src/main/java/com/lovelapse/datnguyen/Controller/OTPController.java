@@ -32,7 +32,12 @@ public class OTPController {
     }
 
     @PostMapping(value = "/sendmailOTP")
-    public ResponseEntity<?>validateOTP(@RequestParam String email){
+    public ResponseEntity<?>sendEmailOTP(@RequestParam String email){
         return new ResponseEntity<>(mailOTPService.sendOTP(email, "OTP to reset password"), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/validateemailOTP")
+    public ResponseEntity<?>validateEmailOTP(@RequestParam String email, @RequestParam String inputOTP){
+        return new ResponseEntity<>(mailOTPService.validateEmailOTP(email, inputOTP), HttpStatus.OK);
     }
 }
