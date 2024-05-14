@@ -21,6 +21,11 @@ public class OTPController {
         this.twilioOTPService = twilioOTPService;
     }
 
+    @GetMapping(value = "/")
+    public String home(){
+        return "LOVELAPSE";
+    }
+
     @PostMapping(value = "/sendOTP")
     public ResponseEntity<?>sendOTP(@RequestBody PhoneRequest request){
         return new ResponseEntity<>(twilioOTPService.sendOTPForPhone(request), HttpStatus.OK);
