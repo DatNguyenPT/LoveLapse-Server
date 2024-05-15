@@ -58,8 +58,7 @@ public class OTPController {
             e.printStackTrace();
             Writer writer = new StringWriter();
             String error = writer.toString();
-            System.out.println(error + "\n");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error validating OTP");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error validating OTP: " + error);
         }
     }
 }
