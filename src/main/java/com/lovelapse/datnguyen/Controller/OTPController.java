@@ -42,7 +42,18 @@ public class OTPController {
     }
 
     @PostMapping(value = "/validateemailOTP")
-    public ResponseEntity<?>validateEmailOTP(@RequestParam String email, @RequestParam String inputOTP){
-        return new ResponseEntity<>(mailOTPService.validateEmailOTP(email, inputOTP), HttpStatus.OK);
+    public ResponseEntity<?> validateEmailOTP(@RequestParam String email, @RequestParam String inputOTP) {
+        try {
+            boolean isValid = mailOTPService.validateEmailOTP(email, inputOTP);
+            if (isValid) {
+                return ResponseEntity.ok("valid OTP");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP");
+            }
+        } catch (Exception e) {
+            // Log the error for debugging
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error validating OTP");
+        }
     }
 }

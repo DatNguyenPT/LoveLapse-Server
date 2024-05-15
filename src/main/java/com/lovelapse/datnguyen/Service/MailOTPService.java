@@ -45,12 +45,12 @@ public class MailOTPService {
         }
     }
 
-    public String validateEmailOTP(String to, String inputOTP){
+    public boolean validateEmailOTP(String to, String inputOTP){
         if (otpMap.get(to).equals(inputOTP)){
             otpMap.remove(to, inputOTP);
-            return "valid OTP";
+            return true;
         }else{
-            return "invalid OTP";
+            return false;
         }
     }
 
