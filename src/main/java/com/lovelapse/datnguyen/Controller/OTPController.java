@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.StringWriter;
+import java.io.Writer;
+
 @RestController
 @RequestMapping("/otp")
 public class OTPController {
@@ -53,6 +56,9 @@ public class OTPController {
         } catch (Exception e) {
             // Log the error for debugging
             e.printStackTrace();
+            Writer writer = new StringWriter();
+            String error = writer.toString();
+            System.out.println(error + "\n");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error validating OTP");
         }
     }
