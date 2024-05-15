@@ -45,14 +45,18 @@ public class MailOTPService {
         }
     }
 
-    public boolean validateEmailOTP(String to, String inputOTP){
-        if (otpMap.get(to).equals(inputOTP)){
-            otpMap.remove(to, inputOTP);
+    public boolean validateEmailOTP(String to, String inputOTP) {
+        System.out.println("Validating OTP for email: " + to + " with OTP: " + inputOTP);
+        if (otpMap.containsKey(to) && otpMap.get(to).equals(inputOTP)) {
+            otpMap.remove(to);
+            System.out.println("OTP is valid");
             return true;
-        }else{
+        } else {
+            System.out.println("Invalid OTP");
             return false;
         }
     }
+
 
     private String generateOTP() {
         return new DecimalFormat("000000").format(new Random().nextInt(999999));
