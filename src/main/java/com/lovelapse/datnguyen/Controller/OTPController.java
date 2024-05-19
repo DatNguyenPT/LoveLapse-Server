@@ -44,7 +44,7 @@ public class OTPController {
         return new ResponseEntity<>(mailOTPService.sendOTP(email, "OTP to reset password"), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/validateemailOTP")
+    @PostMapping(value = "/validate-emailOTP")
     public ResponseEntity<?> validateEmailOTP(@RequestParam String email, @RequestParam String inputOTP) {
         try {
             boolean isValid = mailOTPService.validateEmailOTP(email, inputOTP);
