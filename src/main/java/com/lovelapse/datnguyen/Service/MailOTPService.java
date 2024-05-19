@@ -28,12 +28,10 @@ public class MailOTPService {
             String otp = generateOTP();
             String body = "Your OTP to reset password: " + otp;
 
-            // Set the body of the email as HTML content
             helper.setText(body, false);
-
             javaMailSender.send(mimeMessage);
 
-            // Log the OTP for debugging purposes
+            // Log OTP for debugging
             System.out.println("Generated OTP: " + otp + " for email: " + to);
 
             synchronized (otpMap) {
@@ -44,7 +42,6 @@ public class MailOTPService {
 
             return otp;
         } catch (jakarta.mail.MessagingException e) {
-            // Handle messaging exception
             e.printStackTrace();
             return null;
         }
@@ -53,7 +50,9 @@ public class MailOTPService {
     public boolean validateEmailOTP(String to, String inputOTP) {
         System.out.println("Validating OTP for email: " + to + " with OTP: " + inputOTP);
         synchronized (otpMap) {
-            if (otpMap.containsKey(to) && otpMap.get(to).equals(inputOTP)) {
+            String storedOtp = otpMap.get(to);
+            System.out.println("Stored OTP: " + storedOtp);
+            if (storedOtp != null && storedOtp.equals(inputOTP)) {
                 otpMap.remove(to);
                 System.out.println("OTP is valid");
                 return true;
