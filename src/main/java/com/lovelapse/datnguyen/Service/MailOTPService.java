@@ -14,7 +14,7 @@ import java.util.Random;
 public class MailOTPService {
     @Autowired
     private JavaMailSender javaMailSender;
-    private Map<String, String>otpMap = new HashMap<>();
+    private final Map<String, String> otpMap = new HashMap<>();
 
     public String sendOTP(String to, String subject) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -33,9 +33,14 @@ public class MailOTPService {
 
             javaMailSender.send(mimeMessage);
 
-            System.out.println("Mail sent successfully");
+            // Log the OTP for debugging purposes
+            System.out.println("Generated OTP: " + otp + " for email: " + to);
 
-            otpMap.put(to, otp);
+            synchronized (otpMap) {
+                otpMap.put(to, otp);
+            }
+
+            System.out.println("Mail sent successfully and OTP stored.");
 
             return otp;
         } catch (jakarta.mail.MessagingException e) {
@@ -47,16 +52,17 @@ public class MailOTPService {
 
     public boolean validateEmailOTP(String to, String inputOTP) {
         System.out.println("Validating OTP for email: " + to + " with OTP: " + inputOTP);
-        if (otpMap.containsKey(to) && otpMap.get(to).equals(inputOTP)) {
-            otpMap.remove(to);
-            System.out.println("OTP is valid");
-            return true;
-        } else {
-            System.out.println("Invalid OTP");
-            return false;
+        synchronized (otpMap) {
+            if (otpMap.containsKey(to) && otpMap.get(to).equals(inputOTP)) {
+                otpMap.remove(to);
+                System.out.println("OTP is valid");
+                return true;
+            } else {
+                System.out.println("Invalid OTP");
+                return false;
+            }
         }
     }
-
 
     private String generateOTP() {
         return new DecimalFormat("000000").format(new Random().nextInt(999999));

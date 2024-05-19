@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -41,13 +42,23 @@ public class OTPController {
 
     @PostMapping(value = "/sendmailOTP")
     public ResponseEntity<?>sendEmailOTP(@RequestParam String email){
-        return new ResponseEntity<>(mailOTPService.sendOTP(email, "OTP to reset password"), HttpStatus.OK);
+        System.out.println("Sending OTP to email: " + email);
+        String otp = mailOTPService.sendOTP(email, "OTP to reset password");
+        if (otp != null) {
+            return new ResponseEntity<>(otp, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Failed to send OTP", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping(value = "/validate-emailOTP")
     public ResponseEntity<?> validateEmailOTP(@RequestParam String email, @RequestParam String inputOTP) {
         try {
-            boolean isValid = mailOTPService.validateEmailOTP(email, inputOTP);
+            // Logging email and OTP for debugging
+            System.out.println("Validating OTP for email: " + email);
+            System.out.println("Input OTP: " + inputOTP);
+
+            boolean isValid = mailOTPService.validateEmailOTP(email, inputOTP.trim()); // Using trim() to remove any leading/trailing whitespace
             if (isValid) {
                 return ResponseEntity.ok("valid OTP");
             } else {
@@ -57,6 +68,7 @@ public class OTPController {
             // Log the error for debugging
             e.printStackTrace();
             Writer writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
             String error = writer.toString();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error validating OTP: " + error);
         }
