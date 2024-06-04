@@ -1,7 +1,10 @@
 package com.lovelapse.datnguyen;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,22 +13,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
+@ComponentScan(basePackages = "com.lovelapse.datnguyen")
 public class AppConfig {
     @Autowired
     private Environment env;
-
-    public String getAccountSID() {
-        return env.getProperty("twilio.account_sid");
-    }
-
-    public String getAuthToken() {
-        return env.getProperty("twilio.auth_token");
-    }
-
-    public String getTrialNumber() {
-        return env.getProperty("twilio.trial_number");
-    }
-
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

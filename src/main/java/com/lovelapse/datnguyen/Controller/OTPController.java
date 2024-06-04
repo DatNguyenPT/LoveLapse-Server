@@ -1,8 +1,8 @@
 package com.lovelapse.datnguyen.Controller;
 
-import com.lovelapse.datnguyen.DTO.PhoneRequest;
+import com.lovelapse.datnguyen.DTO.OTPResponse;
+import com.lovelapse.datnguyen.DTO.OTPStatus;
 import com.lovelapse.datnguyen.Service.MailOTPService;
-import com.lovelapse.datnguyen.Service.TwilioOTPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,30 +16,15 @@ import java.io.Writer;
 @RequestMapping("/otp")
 public class OTPController {
     @Autowired
-    private TwilioOTPService twilioOTPService;
-
-    @Autowired
     private MailOTPService mailOTPService;
-
-    OTPController(TwilioOTPService twilioOTPService){
-        this.twilioOTPService = twilioOTPService;
+    OTPController(MailOTPService mailOTPService){
+        this.mailOTPService = mailOTPService;
     }
 
     @GetMapping(value = "/")
     public String home(){
         return "LOVELAPSE";
     }
-
-    @PostMapping(value = "/sendOTP")
-    public ResponseEntity<?>sendOTP(@RequestBody PhoneRequest request){
-        return new ResponseEntity<>(twilioOTPService.sendOTPForPhone(request), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/validateOTP")
-    public ResponseEntity<?>validateOTP(@RequestBody PhoneRequest request){
-        return new ResponseEntity<>(twilioOTPService.validateOTP(request.getNumber(), request.getOtp()), HttpStatus.OK);
-    }
-
     @PostMapping(value = "/sendmailOTP")
     public ResponseEntity<?>sendEmailOTP(@RequestParam String email){
         System.out.println("Sending OTP to email: " + email);
@@ -52,12 +37,18 @@ public class OTPController {
     }
 
     @PostMapping(value = "/validate-emailOTP")
-    public ResponseEntity<?> validateEmailOTP(@RequestParam String email, @RequestParam String inputOTP) {
+    public ResponseEntity<?> validateEmailOTP(@RequestBody OTPResponse otpResponse) {
         try {
-            System.out.println("Validating OTP for email: " + email);
-            System.out.println("Input OTP: " + inputOTP);
+            otpResponse.setStatus(OTPStatus.DELIVERED);
+            String email = otpResponse.getMailOrPhone();
+            String inputOTP = otpResponse.getMessage();
 
-            boolean isValid = mailOTPService.validateEmailOTP(email, inputOTP.trim());
+            System.out.println("Input param: \n");
+            System.out.println("Validating OTP for email: " + otpResponse.getMailOrPhone());
+            System.out.println("Input OTP: " + otpResponse.getMessage());
+
+            boolean isValid = mailOTPService.validateEmailOTP(email.trim(), inputOTP.trim());
+
             if (isValid) {
                 return ResponseEntity.ok("valid OTP");
             } else {

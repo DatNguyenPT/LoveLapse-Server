@@ -1,27 +1,46 @@
 package com.lovelapse.datnguyen.Service;
 
+import com.lovelapse.datnguyen.DTO.OTPResponse;
+import com.lovelapse.datnguyen.DTO.OTPStatus;
+import com.lovelapse.datnguyen.Repository.OTPRepo;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Random;
 
 @Service
 public class MailOTPService {
     @Autowired
     private JavaMailSender javaMailSender;
-    private final Map<String, String> otpMap = new HashMap<>();
+
+    @Autowired
+    private OTPRepo otpRepo;
+
+    public OTPResponse validOTP(String foundOTP) {
+        return otpRepo.findAll().stream()
+                .filter(otp -> otp.getMessage().equals(foundOTP))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<OTPResponse> getAll() {
+        return otpRepo.findAll();
+    }
+
+    public void addOTPToDatabase(String to, OTPResponse newOTP) {
+        otpRepo.updateNewOTP(to, newOTP.getMessage());
+        otpRepo.save(newOTP);
+    }
 
     public String sendOTP(String to, String subject) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-
         try {
-            helper.setFrom("phamtiendatthcsab123@gmail.com");
+            helper.setFrom("phamtiendatthcsab123@gmail.com"); // server email
             helper.setTo(to);
             helper.setSubject(subject);
 
@@ -34,9 +53,12 @@ public class MailOTPService {
             // Log OTP for debugging
             System.out.println("Generated OTP: " + otp + " for email: " + to);
 
-            synchronized (otpMap) {
-                otpMap.put(to, otp);
-            }
+            OTPResponse newOTP = new OTPResponse();
+            newOTP.setMailOrPhone(to);
+            newOTP.setMessage(otp);
+            newOTP.setStatus(OTPStatus.DELIVERED);
+
+            addOTPToDatabase(to, newOTP);
 
             System.out.println("Mail sent successfully and OTP stored.");
 
@@ -47,21 +69,25 @@ public class MailOTPService {
         }
     }
 
-    public boolean validateEmailOTP(String to, String inputOTP) {
-        System.out.println("Validating OTP for email: " + to + " with OTP: " + inputOTP);
-        synchronized (otpMap) {
-            String storedOtp = otpMap.get(to);
-            System.out.println("Stored OTP: " + storedOtp);
-            if (storedOtp != null && storedOtp.equals(inputOTP)) {
-                otpMap.remove(to);
-                System.out.println("OTP is valid");
+    public boolean validateEmailOTP(String mailOrPhone, String inputOTP) {
+        System.out.println("Validating OTP for email: " + mailOrPhone + " with OTP: " + inputOTP);
+        OTPResponse target = validOTP(inputOTP);
+        if (target != null) {
+            int index = mailOrPhone.indexOf("@");
+            String targetMailOrPhone = target.getMailOrPhone().substring(0, index);
+            String temp = mailOrPhone.substring(0, index);
+            if (targetMailOrPhone.trim().equals(temp.trim())){
+                System.out.println("Target: " + target.getMailOrPhone() + " - " + target.getMessage() + "\n");
+                System.out.println("Valid");
+
+                otpRepo.delete(target);
                 return true;
-            } else {
-                System.out.println("Invalid OTP");
-                return false;
             }
+
         }
+        return false;
     }
+
 
     private String generateOTP() {
         return new DecimalFormat("000000").format(new Random().nextInt(999999));
