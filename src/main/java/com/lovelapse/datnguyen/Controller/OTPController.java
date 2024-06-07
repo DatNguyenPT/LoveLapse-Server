@@ -15,6 +15,7 @@ import java.io.Writer;
 @RestController
 @RequestMapping("/otp")
 public class OTPController {
+    // OTP Controller
     @Autowired
     private MailOTPService mailOTPService;
     OTPController(MailOTPService mailOTPService){

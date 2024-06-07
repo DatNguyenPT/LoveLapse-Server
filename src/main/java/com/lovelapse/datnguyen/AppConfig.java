@@ -1,5 +1,7 @@
 package com.lovelapse.datnguyen;
 
+import com.cloudinary.Cloudinary;
+import com.lovelapse.datnguyen.Service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -10,6 +12,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -29,8 +33,18 @@ public class AppConfig {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true"); // Enable debug mode for troubleshooting
+        props.put("mail.debug", "true");
 
         return mailSender;
+    }
+
+    @Bean
+    public Cloudinary getCloudinary(){
+        Map config = new HashMap();
+        config.put("cloud_name", "dx9sq828a");
+        config.put("api_key", "348927719116222");
+        config.put("api_secret", "0p1K_QR7RF1zVN_6ADmUXB4LCac");
+        config.put("secure", true);
+        return new Cloudinary(config);
     }
 }
