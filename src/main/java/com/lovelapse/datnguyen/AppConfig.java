@@ -2,7 +2,9 @@ package com.lovelapse.datnguyen;
 
 import com.cloudinary.Cloudinary;
 //import com.lovelapse.datnguyen.Service.ImageService;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -38,13 +40,20 @@ public class AppConfig {
         return mailSender;
     }
 
-    /*@Bean
+    @Value("${cloudinary.cloud-name}")
+    private String cloudName;
+
+    @Value("${cloudinary.api-key}")
+    private String apiKey;
+
+    @Value("${cloudinary.api-secret}")
+    private String apiSecret;
+    @Bean
     public Cloudinary getCloudinary(){
-        Map config = new HashMap();
-        config.put("cloud_name", "dx9sq828a");
-        config.put("api_key", "348927719116222");
-        config.put("api_secret", "0p1K_QR7RF1zVN_6ADmUXB4LCac");
-        config.put("secure", true);
-        return new Cloudinary(config);
-    }*/
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", cloudName,
+                "api_key", apiKey,
+                "api_secret", apiSecret
+        ));
+    }
 }
