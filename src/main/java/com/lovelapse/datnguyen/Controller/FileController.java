@@ -15,9 +15,10 @@ public class FileController {
     }
     @PostMapping("/upload/image")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
-                                         @RequestParam("user") String username) throws IOException, IOException {
+                                         @RequestParam("user") String username,
+                                         @RequestParam("fileName") String fileName) throws IOException, IOException {
         String folderName = "Users/" + username;
-        return ResponseEntity.ok(fileService.uploadFile(file, folderName));
+        return ResponseEntity.ok(fileService.uploadFile(file, folderName, fileName));
     }
 
     @PostMapping("/upload/video")
