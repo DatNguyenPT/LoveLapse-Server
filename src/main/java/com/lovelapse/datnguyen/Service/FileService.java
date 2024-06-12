@@ -1,6 +1,7 @@
 package com.lovelapse.datnguyen.Service;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +41,28 @@ public class FileService {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    // For user, folderPath = Users/username/imageName
+    public String getFileURL(String folderPath, String fileName) {
+        try {
+            Map result = cloudinary.api().resource(folderPath + "/" + fileName, ObjectUtils.emptyMap());
+            return (String) result.get("url");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getImageUrlWithTransformation(String folderPath, String imageName, Transformation transformation) {
+        try {
+            Map result = cloudinary.api().resource(folderPath + "/" + imageName,
+                    ObjectUtils.asMap("transformation", transformation));
+            return (String) result.get("url");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

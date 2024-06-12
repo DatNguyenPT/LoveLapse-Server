@@ -32,4 +32,9 @@ public class FileController {
         String folderPath = "Users/" + folderName;
         return fileService.isFolderExists(folderPath);
     }
+
+    @GetMapping("/get/files")
+    public ResponseEntity<?> retrieveFiles(@RequestParam("folderPath") String folderPath, @RequestParam("fileName") String fileName){
+        return ResponseEntity.ok(fileService.getFileURL(folderPath, fileName));
+    }
 }
