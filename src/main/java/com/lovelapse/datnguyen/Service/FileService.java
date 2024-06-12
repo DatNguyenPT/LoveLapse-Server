@@ -2,17 +2,16 @@ package com.lovelapse.datnguyen.Service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
 @Service
-public class ImageService {
+public class FileService {
     private final Cloudinary cloudinary;
 
-    public ImageService(Cloudinary cloudinary) {
+    public FileService(Cloudinary cloudinary) {
         this.cloudinary = cloudinary;
     }
 
@@ -28,5 +27,19 @@ public class ImageService {
                         "resource_type", "video",
                         "folder", folderName
                 ));
+    }
+
+    public boolean isFolderExists(String folderPath) {
+        try {
+            Map result = cloudinary.api().resources(ObjectUtils.asMap(
+                    "type", "upload",
+                    "prefix", folderPath,
+                    "max_results", 1
+            ));
+            return !((Map) result.get("resources")).isEmpty();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
