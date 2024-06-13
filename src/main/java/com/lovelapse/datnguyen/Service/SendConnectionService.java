@@ -20,7 +20,7 @@ public class SendConnectionService {
     public void addNewConnections(String from, String to){
         Connections connections = new Connections();
         connections.setFromUser(from);
-        connections.setFromUser(to);
+        connections.setToUser(to);
         connections.setReplied(false);
         connections.setDaySendOrReceive(LocalDate.now().toString());
         connectionRepo.save(connections);

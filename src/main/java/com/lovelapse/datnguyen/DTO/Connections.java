@@ -16,10 +16,10 @@ public class Connections {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "fromuser")
+    @Column(name = "fromUser")
     private String fromUser;
 
-    @Column(name = "touser")
+    @Column(name = "toUser")
     private String toUser;
 
     @Column(name = "replied")
