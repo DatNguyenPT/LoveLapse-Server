@@ -19,17 +19,17 @@ public class SendConnectionService {
 
     public void addNewConnections(String from, String to){
         Connections connections = new Connections();
-        connections.setFrom(from);
-        connections.setTo(to);
+        connections.setFromUser(from);
+        connections.setFromUser(to);
         connections.setReplied(false);
-        connections.setDaysendorreceive(LocalDate.now().toString());
+        connections.setDaySendOrReceive(LocalDate.now().toString());
         connectionRepo.save(connections);
 
     }
     // Current user's message is replied
     public void beReplied(String from, String to, String currentUser){
         Connections connections = connectionRepo.findAll().stream()
-                .filter(con -> con.getFrom().equals(currentUser)) // User sent
+                .filter(con -> con.getFromUser().equals(currentUser)) // User sent
                 .findFirst()
                 .orElse(null);
         if(connections != null)
@@ -39,7 +39,7 @@ public class SendConnectionService {
     // User replied to other's message
     public void reply(String from, String to, String currentUser){
         Connections connections = connectionRepo.findAll().stream()
-                .filter(con -> con.getTo().equals(currentUser)) // User receive
+                .filter(con -> con.getToUser().equals(currentUser)) // User receive
                 .findFirst()
                 .orElse(null);
         if(connections != null)
@@ -49,7 +49,7 @@ public class SendConnectionService {
     // Find who the user sent connections to
     public List<Connections> findSendConnections(String currentUser){
         List<Connections>list = connectionRepo.findAll().stream()
-                .filter(con -> con.getFrom().equals(currentUser))
+                .filter(con -> con.getFromUser().equals(currentUser))
                 .toList();
         return list;
     }
@@ -57,7 +57,7 @@ public class SendConnectionService {
     // Find who the user receive connections from
     public List<Connections> findReceiveConnections(String currentUser){
         List<Connections>list = connectionRepo.findAll().stream()
-                .filter(con -> con.getTo().equals(currentUser))
+                .filter(con -> con.getToUser().equals(currentUser))
                 .toList();
         return list;
     }
