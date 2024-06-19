@@ -1,13 +1,11 @@
 package com.lovelapse.datnguyen.Controller;
 
+import com.lovelapse.datnguyen.DTO.Connections;
 import com.lovelapse.datnguyen.Service.SendConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ConnectionController {
@@ -19,8 +17,8 @@ public class ConnectionController {
     }
 
     @PostMapping("/connection/send")
-    public ResponseEntity<?>addConnection(@RequestParam String from, @RequestParam String to){
-        sendConnectionService.addNewConnections(from, to);
+    public ResponseEntity<?>addConnection(@RequestBody Connections connections){
+        sendConnectionService.addNewConnections(connections);
         return ResponseEntity.ok("New connection has been added");
     }
 

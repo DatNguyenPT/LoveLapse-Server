@@ -18,11 +18,6 @@ public class SendConnectionService {
     }
 
     public void addNewConnections(Connections connections){
-        /*Connections connections = new Connections();
-        connections.setFromUser(from);
-        connections.setToUser(to);
-        connections.setReplied(false);
-        connections.setDaySendOrReceive(LocalDate.now().toString());*/
         connectionRepo.save(connections);
 
     }
