@@ -61,4 +61,8 @@ public class SendConnectionService {
                 .toList();
         return list;
     }
+
+    public int getSize(){
+        return connectionRepo.findAll().size();
+    }
 }

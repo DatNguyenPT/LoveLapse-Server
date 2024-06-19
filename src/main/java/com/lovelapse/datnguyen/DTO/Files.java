@@ -11,5 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Files {
+    private String sender;
     private MultipartFile file;
 }

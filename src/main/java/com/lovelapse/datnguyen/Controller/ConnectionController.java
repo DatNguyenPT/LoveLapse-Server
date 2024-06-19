@@ -2,6 +2,7 @@ package com.lovelapse.datnguyen.Controller;
 
 import com.lovelapse.datnguyen.Service.SendConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +42,11 @@ public class ConnectionController {
     @PostMapping("/connection/reply")
     public void reply(@RequestParam String from, @RequestParam String to, @RequestParam String currentUser){
         sendConnectionService.reply(from, to, currentUser);
+    }
+
+    // ADMIN
+    @PostMapping("/connection/size")
+    public ResponseEntity<?> getSize(){
+        return new ResponseEntity<>(sendConnectionService.getSize(), HttpStatus.OK);
     }
 }
