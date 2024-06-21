@@ -5,8 +5,8 @@ import com.lovelapse.datnguyen.Repository.ConnectionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SendConnectionService {
@@ -19,45 +19,43 @@ public class SendConnectionService {
 
     public void addNewConnections(Connections connections){
         connectionRepo.save(connections);
-
     }
-    // Current user's message is replied
+
     public void beReplied(String from, String to, String currentUser){
         Connections connections = connectionRepo.findAll().stream()
-                .filter(con -> con.getFromUser().equals(currentUser)) // User sent
+                .filter(con -> con.getFromUser().equals(currentUser) && con.getFromUser().equals(from) && con.getToUser().equals(to))
                 .findFirst()
                 .orElse(null);
-        if(connections != null)
+        if(connections != null) {
             connections.setReplied(true);
+            connectionRepo.save(connections); // Save lại sau khi thay đổi
+        }
     }
 
-    // User replied to other's message
     public void reply(String from, String to, String currentUser){
         Connections connections = connectionRepo.findAll().stream()
-                .filter(con -> con.getToUser().equals(currentUser)) // User receive
+                .filter(con -> con.getToUser().equals(currentUser) && con.getFromUser().equals(from) && con.getToUser().equals(to))
                 .findFirst()
                 .orElse(null);
-        if(connections != null)
+        if(connections != null) {
             connections.setReplied(true);
+            connectionRepo.save(connections); // Save lại sau khi thay đổi
+        }
     }
 
-    // Find who the user sent connections to
     public List<Connections> findSendConnections(String currentUser){
-        List<Connections>list = connectionRepo.findAll().stream()
+        return connectionRepo.findAll().stream()
                 .filter(con -> con.getFromUser().equals(currentUser))
-                .toList();
-        return list;
+                .collect(Collectors.toList());
     }
 
-    // Find who the user receive connections from
     public List<Connections> findReceiveConnections(String currentUser){
-        List<Connections>list = connectionRepo.findAll().stream()
+        return connectionRepo.findAll().stream()
                 .filter(con -> con.getToUser().equals(currentUser))
-                .toList();
-        return list;
+                .collect(Collectors.toList());
     }
 
     public int getSize(){
-        return connectionRepo.findAll().size();
+        return (int) connectionRepo.count();
     }
 }
