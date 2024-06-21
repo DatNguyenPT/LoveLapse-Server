@@ -18,7 +18,7 @@ public class SendConnectionService {
     }
 
     public void addNewConnections(Connections connections){
-        connectionRepo.save(connections);
+        connectionRepo.saveAndFlush(connections);
     }
 
     public void beReplied(String from, String to, String currentUser){
