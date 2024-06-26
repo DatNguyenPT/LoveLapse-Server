@@ -1,18 +1,14 @@
 package com.lovelapse.datnguyen;
 
 import com.cloudinary.Cloudinary;
-//import com.lovelapse.datnguyen.Service.ImageService;
 import com.cloudinary.utils.ObjectUtils;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
-import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +17,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = "com.lovelapse.datnguyen")
 public class AppConfig {
+
     @Autowired
     private Environment env;
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -54,8 +51,9 @@ public class AppConfig {
 
     @Value("${cloudinary.api-secret}")
     private String apiSecret;
+
     @Bean
-    public Cloudinary getCloudinary(){
+    public Cloudinary getCloudinary() {
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,
@@ -63,25 +61,33 @@ public class AppConfig {
         ));
     }
 
+    private FirebaseApp firebaseApp;
+
     @Bean
-    public FirebaseDatabase firebaseDatabase() throws IOException, java.io.IOException {
-        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
-                new ClassPathResource("google-services.json").getInputStream());
-        FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-                .setCredentials(googleCredentials)
-                .build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "lovelapse-server");
-        return FirebaseDatabase.getInstance(app);
+    public FirebaseDatabase firebaseDatabase() throws Exception {
+        if (firebaseApp == null) {
+            initializeFirebaseApp();
+        }
+        return FirebaseDatabase.getInstance(firebaseApp);
     }
 
     @Bean
-    public FirebaseMessaging firebaseMessaging() throws java.io.IOException {
-        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
-                new ClassPathResource("google-services.json").getInputStream());
-        FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-                .setCredentials(googleCredentials)
-                .build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "lovelapse-server");
-        return FirebaseMessaging.getInstance(app);
+    public FirebaseMessaging firebaseMessaging() throws Exception {
+        if (firebaseApp == null) {
+            initializeFirebaseApp();
+        }
+        return FirebaseMessaging.getInstance(firebaseApp);
+    }
+
+    private synchronized void initializeFirebaseApp() throws Exception {
+        if (firebaseApp == null) {
+            GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
+                    new ClassPathResource("google-services.json").getInputStream());
+            FirebaseOptions firebaseOptions = FirebaseOptions.builder()
+                    .setCredentials(googleCredentials)
+                    .setDatabaseUrl("https://tinderv2-92c85-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                    .build();
+            firebaseApp = FirebaseApp.initializeApp(firebaseOptions, "lovelapse-server");
+        }
     }
 }

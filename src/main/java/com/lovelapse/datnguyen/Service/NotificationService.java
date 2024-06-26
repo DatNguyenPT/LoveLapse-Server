@@ -9,20 +9,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService {
+
     @Autowired
     private FirebaseMessaging firebaseMessaging;
+
     @Autowired
     private FirebaseDatabase firebaseDatabase;
 
     public String sendNotificationToAllUsers(NotificationModel notificationModel) {
         DatabaseReference usersRef = firebaseDatabase.getReference("Users");
+
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userKey = userSnapshot.getKey();
-                    // Assuming the user node key is the FCM token or something similar
                     String recipientToken = userKey;
+
+                    // Log recipientToken to verify it's correct
+                    System.out.println("Sending notification to: " + recipientToken);
 
                     sendNotification(notificationModel, recipientToken);
                 }
@@ -54,6 +59,8 @@ public class NotificationService {
         } catch (FirebaseMessagingException e) {
             e.printStackTrace();
             System.err.println("Failed to send notification to: " + recipientToken);
+            // You can log this error or handle it as per your application's needs
         }
     }
 }
+

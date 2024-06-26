@@ -1,64 +1,13 @@
 {
-  "project_info": {
-    "project_number": "657610696896",
-    "firebase_url": "https://tinderv2-92c85-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "tinderv2-92c85",
-    "storage_bucket": "tinderv2-92c85.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:657610696896:android:ba63f205dc6f5ca3932525",
-        "android_client_info": {
-          "package_name": "com.example.lovelapse"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "657610696896-h7h4amksjor235kuie90vq4fsrf2mmdc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.lovelapse",
-            "certificate_hash": "ace9e36057aced4e32d128bb10771365f32e46b2"
-          }
-        },
-        {
-          "client_id": "657610696896-ogh8iuni27424nt9i3voa5jnpbivqk1q.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.lovelapse",
-            "certificate_hash": "53174bc36bcbe53effbadd3c0690bedbf2b4eef9"
-          }
-        },
-        {
-          "client_id": "657610696896-td7urojleh2aop8mhlubsnfoeqaa2kg2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.lovelapse",
-            "certificate_hash": "ae8394c4712fbe6d48dfc4f06807cfb2b864b869"
-          }
-        },
-        {
-          "client_id": "657610696896-iig503j3gf29vps2qropet12fru5umvi.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAasCad_gHdSeovEIX4hTMVJukw5YpnXqQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "657610696896-b4mbrob76r4skndillsc23oqg7g9vohj.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+  "type": "service_account",
+  "project_id": "tinderv2-92c85",
+  "private_key_id": "5fa85e4e9b8ac7284a7c88cf07bffd03f3aec225",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC9z99oIv94Mbfg\niK5et8i6MDf5g2yZAqQkcA6U23vbT9Bo0BYOZ0tfJD2y0dKlPHgIP8Dub7mG7FSG\ncoxjXNyjOfVt2dnpQe5luyy3j1qeAY3PxJ+YjqoEJ6cNNGrjPVQsK0l49VaYy1m8\nFXPBFFfOEI6GwNbnEpZGWxxDK0MIYkCOPf8GfWUpXj/0fTRudfIC4fj0svX/jTAJ\nAQdBQizocbzlBraqKj/R6OZF8gd4zW5dymNThdQl2MBL2e/LvIHb4FAqAnXfI4nv\nEEwZQmvGGBKqsSWI+1H7tINkNf0MQ6pUduayEa+uCrzWTn4Z/4DP8JicGFgzdG6C\nSC8yZ+y/AgMBAAECggEABvP0ZRDTIYirXv2NavQkgDLVT2iHCTEq6MLKEJ3cSEkA\n2LYL+MnD3bUAJZVrYpjNH3rmYFWWCuE2qhjMF7UGcrGO0fqm8X/Jcc83cMnphzGG\nC6mnhvkYNUAWmHSRGHMzVXgzICEsjjr0td+7S8P+VhK5MH/OiiGzgNmZjBmrl5pM\nSIuadaCRjDGmP7BfcYg0XkHkLFeJl9VHxdUKSBwiPSwVhBxn9+6QAn1n3YESC5+F\nS5gUxS3RwfGCASraXtg/9wcMUet9B3JdxYcABf+NMdL5aN2dqSlxHH59RMlanW6e\nsV5Kg8j513cuysrUBHCvVaeBeDgcWK0fgH9ZQ+h6AQKBgQDetUxmHTU64nZYhRXP\n1L3eq9ZElchgYD30ZKFPi3hvrVMVC3upmsx8ZBG7NPp7O9Y7JK+3pLFaGNK6nR/D\nzMZgRm5TmSSQ/ZPUURzy2K9U6fH4nbFNJFN4JFApLmC1flPdm1bWC7E89Ww2I4Od\nN57aDc7QTi4xJA+PjH7J2pHsgQKBgQDaL6/xpOyv/VdByrCjdJNnLbbGi5ey6HDC\nUAs/ujj1wGGxSL0FD86ppyGiVObRem9RUWmvdWV5b7SgzY9+x01GIXVTjLFcW2fE\nsx/mVU624dFxTAToYHxijpDhgNbWFHO7YMvDXY/6GmceVsUIoZwJZZ+i8IucoeYY\nlabMt9Y5PwKBgQCQbHny7pYKbbnZhdSzRn8q27zEFW4wMbl7t5Z0gznDEl+CkkPL\npTten3ZwNNcK+67eA9h/+ymYB+kAY8ypqS4sWQBK7lEsRYWMdl2TjrmFE4F7fKfy\nItCOZN4nFpBYome4mnghrsttgKqAIV/EoME/Hx0zML/71irRKIdAV6GyAQKBgQCa\nF6XOJqlWnbibaZgYyMM10o5MaNgJban9QeS/7DhAL8+PEo0UXxaYsMXLTOT7OtoV\nd0cJuQKioibSjnrykbVce1LOYAX+8Ts3Kz6zQLpn5NIzjvnEWChgvslJyeFwrl8S\nDgm6f4CopS8AuU1MjD6UUGZPAE3JoHnOERsNaCRupwKBgDk9nWdWC/X5iW0CRFoQ\nM+mu2LK2yId87yY4j53l8qkpmimmGIy7MOEAZMNQU4+AwIQe18TImYokXDmm4VQc\nZdGVRKHYu82vzS0JAQL2cm5foXdjiEt1Jnt1kJDxD+mXwFv8s18EbJgm0igVfDtP\nNv0xPxUZwa66OpiAI1ADxvMj\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-judpx@tinderv2-92c85.iam.gserviceaccount.com",
+  "client_id": "117841103479594599611",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-judpx%40tinderv2-92c85.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
 }
