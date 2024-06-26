@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "657610696896",
+    "firebase_url": "https://tinderv2-92c85-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "tinderv2-92c85",
+    "storage_bucket": "tinderv2-92c85.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657610696896:android:ba63f205dc6f5ca3932525",
+        "android_client_info": {
+          "package_name": "com.example.lovelapse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "657610696896-h7h4amksjor235kuie90vq4fsrf2mmdc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lovelapse",
+            "certificate_hash": "ace9e36057aced4e32d128bb10771365f32e46b2"
+          }
+        },
+        {
+          "client_id": "657610696896-ogh8iuni27424nt9i3voa5jnpbivqk1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lovelapse",
+            "certificate_hash": "53174bc36bcbe53effbadd3c0690bedbf2b4eef9"
+          }
+        },
+        {
+          "client_id": "657610696896-td7urojleh2aop8mhlubsnfoeqaa2kg2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lovelapse",
+            "certificate_hash": "ae8394c4712fbe6d48dfc4f06807cfb2b864b869"
+          }
+        },
+        {
+          "client_id": "657610696896-iig503j3gf29vps2qropet12fru5umvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAasCad_gHdSeovEIX4hTMVJukw5YpnXqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "657610696896-b4mbrob76r4skndillsc23oqg7g9vohj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,12 @@ package com.lovelapse.datnguyen;
 import com.cloudinary.Cloudinary;
 //import com.lovelapse.datnguyen.Service.ImageService;
 import com.cloudinary.utils.ObjectUtils;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,11 +17,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileInputStream;
 import java.util.Properties;
 
 @Configuration
@@ -55,5 +61,27 @@ public class AppConfig {
                 "api_key", apiKey,
                 "api_secret", apiSecret
         ));
+    }
+
+    @Bean
+    public FirebaseDatabase firebaseDatabase() throws IOException, java.io.IOException {
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
+                new ClassPathResource("google-services.json").getInputStream());
+        FirebaseOptions firebaseOptions = FirebaseOptions.builder()
+                .setCredentials(googleCredentials)
+                .build();
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "lovelapse-server");
+        return FirebaseDatabase.getInstance(app);
+    }
+
+    @Bean
+    public FirebaseMessaging firebaseMessaging() throws java.io.IOException {
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
+                new ClassPathResource("google-services.json").getInputStream());
+        FirebaseOptions firebaseOptions = FirebaseOptions.builder()
+                .setCredentials(googleCredentials)
+                .build();
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "lovelapse-server");
+        return FirebaseMessaging.getInstance(app);
     }
 }
