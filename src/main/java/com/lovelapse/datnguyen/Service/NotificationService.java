@@ -6,7 +6,6 @@ import com.lovelapse.datnguyen.DTO.NotificationModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class NotificationService {
 
@@ -23,13 +22,14 @@ public class NotificationService {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String userKey = userSnapshot.getKey();
-                    String recipientToken = userKey;
+                    String fcmToken = userSnapshot.child("fcmToken").getValue(String.class);
 
-                    // Log recipientToken to verify it's correct
-                    System.out.println("Sending notification to: " + recipientToken);
-
-                    sendNotification(notificationModel, recipientToken);
+                    if (fcmToken != null) {
+                        System.out.println("Sending notification to: " + fcmToken);
+                        sendNotification(notificationModel, fcmToken);
+                    } else {
+                        System.out.println("No FCM token found for user: " + userSnapshot.getKey());
+                    }
                 }
             }
 
@@ -59,8 +59,6 @@ public class NotificationService {
         } catch (FirebaseMessagingException e) {
             e.printStackTrace();
             System.err.println("Failed to send notification to: " + recipientToken);
-            // You can log this error or handle it as per your application's needs
         }
     }
 }
-
