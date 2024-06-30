@@ -23,7 +23,6 @@ public class NotificationService {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String fcmToken = userSnapshot.child("fcmToken").getValue(String.class);
-
                     if (fcmToken != null) {
                         System.out.println("Sending notification to: " + fcmToken);
                         sendNotification(notificationModel, fcmToken);
@@ -58,6 +57,7 @@ public class NotificationService {
             System.out.println("Notification sent to: " + recipientToken);
         } catch (FirebaseMessagingException e) {
             e.printStackTrace();
+            System.err.println("Log error: " + e.getMessage());
             System.err.println("Failed to send notification to: " + recipientToken);
         }
     }
