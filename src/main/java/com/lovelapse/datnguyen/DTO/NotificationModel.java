@@ -12,6 +12,9 @@ import lombok.Data;
 @Table(name = "Notifications")
 public class NotificationModel {
     @Id
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "title")
     private String title;
 
