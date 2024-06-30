@@ -3,8 +3,13 @@ package com.lovelapse.datnguyen.Service;
 import com.google.firebase.database.*;
 import com.google.firebase.messaging.*;
 import com.lovelapse.datnguyen.DTO.NotificationModel;
+import com.lovelapse.datnguyen.Repository.NotiRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class NotificationService {
@@ -14,6 +19,9 @@ public class NotificationService {
 
     @Autowired
     private FirebaseDatabase firebaseDatabase;
+
+    @Autowired
+    private NotiRepo notiRepo;
 
     public String sendNotificationToAllUsers(NotificationModel notificationModel) {
         DatabaseReference usersRef = firebaseDatabase.getReference("Users");
@@ -26,6 +34,7 @@ public class NotificationService {
                     if (fcmToken != null) {
                         System.out.println("Sending notification to: " + fcmToken);
                         sendNotification(notificationModel, fcmToken);
+                        notiRepo.save(notificationModel);
                     } else {
                         System.out.println("No FCM token found for user: " + userSnapshot.getKey());
                     }
@@ -60,5 +69,14 @@ public class NotificationService {
             System.err.println("Log error: " + e.getMessage());
             System.err.println("Failed to send notification to: " + recipientToken);
         }
+    }
+
+
+    public List<NotificationModel>getAllData(){
+        return notiRepo.findAll();
+    }
+
+    public void clearNoti(){
+        notiRepo.deleteAll();
     }
 }

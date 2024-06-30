@@ -3,10 +3,10 @@ package com.lovelapse.datnguyen.Controller;
 import com.lovelapse.datnguyen.DTO.NotificationModel;
 import com.lovelapse.datnguyen.Service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/notification")
@@ -17,5 +17,15 @@ public class NotificationController {
     @PostMapping("/send")
     public String sendNoti(@RequestBody NotificationModel notificationModel){
         return notificationService.sendNotificationToAllUsers(notificationModel);
+    }
+
+    @PostMapping("/delete")
+    public void clearAllNoti(){
+        notificationService.clearNoti();
+    }
+
+    @GetMapping("/getAllNoti")
+    public List<NotificationModel> getAllNotis(){
+        return notificationService.getAllData();
     }
 }
