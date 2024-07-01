@@ -7,10 +7,7 @@ import com.lovelapse.datnguyen.Repository.NotiRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class NotificationService {
@@ -26,7 +23,7 @@ public class NotificationService {
 
     public String sendNotificationToAllUsers(NotificationModel notificationModel) {
         DatabaseReference usersRef = firebaseDatabase.getReference("Users");
-
+        String[] result = {""};
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -36,8 +33,10 @@ public class NotificationService {
                         System.out.println("Sending notification to: " + fcmToken);
                         sendNotification(notificationModel, fcmToken);
                         notiRepo.save(notificationModel);
+                        result[0] = "Send Notification Successfully";
                     } else {
                         System.out.println("No FCM token found for user: " + userSnapshot.getKey());
+                        result[0] = "Send Notification Failed";
                     }
                 }
             }
@@ -45,39 +44,45 @@ public class NotificationService {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Error reading users: " + databaseError.getCode());
+                result[0] = "Send Notification Failed";
             }
         });
 
-        return "Notifications sent successfully";
+        return result[0];
     }
 
-    private void sendNotification(NotificationModel notificationModel, String recipientToken) {
-        Notification notification = Notification.builder()
-                .setTitle(notificationModel.getTitle())
-                .setBody(notificationModel.getBody())
-                .build();
-
+    public String sendNotification(NotificationModel notificationModel, String recipientToken) {
+        String result = "";
         Message message = Message.builder()
                 .setToken(recipientToken)
-                .setNotification(notification)
+                .setNotification(Notification.builder()
+                        .setTitle(notificationModel.getTitle())
+                        .setBody(notificationModel.getBody())
+                        .build())
+                .putData("title", notificationModel.getTitle())
+                .putData("body", notificationModel.getBody())
                 .build();
 
         try {
             firebaseMessaging.send(message);
             System.out.println("Notification sent to: " + recipientToken);
+            result = "Sent Notification Successfully";
         } catch (FirebaseMessagingException e) {
             e.printStackTrace();
             System.err.println("Log error: " + e.getMessage());
             System.err.println("Failed to send notification to: " + recipientToken);
+            result = e.getMessage();
         }
+        return result;
     }
 
 
-    public List<NotificationModel>getAllData(){
+
+    public List<NotificationModel> getAllData() {
         return notiRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public void clearNoti(){
+    public void clearNoti() {
         notiRepo.deleteAll();
     }
 }

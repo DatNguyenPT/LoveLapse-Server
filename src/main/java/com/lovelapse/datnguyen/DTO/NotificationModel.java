@@ -4,11 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "Notifications")
 public class NotificationModel {
     @Id
@@ -20,4 +23,5 @@ public class NotificationModel {
 
     @Column(name = "body")
     private String body;
+
 }

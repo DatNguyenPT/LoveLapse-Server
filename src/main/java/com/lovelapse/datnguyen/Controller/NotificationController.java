@@ -4,8 +4,6 @@ import com.lovelapse.datnguyen.DTO.NotificationModel;
 import com.lovelapse.datnguyen.Service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -17,6 +15,11 @@ public class NotificationController {
     @PostMapping("/send")
     public String sendNoti(@RequestBody NotificationModel notificationModel){
         return notificationService.sendNotificationToAllUsers(notificationModel);
+    }
+
+    @PostMapping("/sendTo")
+    public String sendNotiTo(@RequestBody NotificationModel notificationModel, @RequestParam String recipientToken){
+        return notificationService.sendNotification(notificationModel, recipientToken);
     }
 
     @PostMapping("/delete")
