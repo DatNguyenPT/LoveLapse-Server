@@ -5,6 +5,7 @@ import com.google.firebase.messaging.*;
 import com.lovelapse.datnguyen.DTO.NotificationModel;
 import com.lovelapse.datnguyen.Repository.NotiRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class NotificationService {
 
 
     public List<NotificationModel>getAllData(){
-        return notiRepo.findAll();
+        return notiRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public void clearNoti(){
