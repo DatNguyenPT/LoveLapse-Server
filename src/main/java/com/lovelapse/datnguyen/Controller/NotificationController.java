@@ -31,4 +31,9 @@ public class NotificationController {
     public List<NotificationModel> getAllNotis(){
         return notificationService.getAllData();
     }
+
+    @PostMapping("/updateToken")
+    public void updateToken(@RequestParam String token){
+        notificationService.updateFCMTokens(token);
+    }
 }
