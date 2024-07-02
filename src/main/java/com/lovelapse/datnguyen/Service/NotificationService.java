@@ -14,10 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class NotificationService {
@@ -116,15 +113,70 @@ public class NotificationService {
         return duration.getSeconds();
     }
 
+    public Map<String, String>getUserList(){
+        Map<String, String> userMap = new HashMap<>();
+        DatabaseReference userList = firebaseDatabase.getReference("Users");
+        userList.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String fcmToken = userSnapshot.child("fcmToken").getValue(String.class);
+                    if (fcmToken != null) {
+                        userMap.put(userSnapshot.getKey(), fcmToken);
+                    } else {
+                        System.out.println("No FCM token found for user: " + userSnapshot.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error reading users: " + databaseError.getCode());
+            }
+        });
+        return userMap;
+    }
+
+    public Map<String, List<String>>getSuperLikeList(){
+        Map<String, List<String>> likeMap = new HashMap<>();
+        DatabaseReference superLikeList = firebaseDatabase.getReference("Superlike");
+        superLikeList.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String to = userSnapshot.child("to").getValue(String.class);
+                    String from = userSnapshot.child("from").getValue(String.class);
+                    if (to != null && from != null) {
+                        if(!likeMap.containsKey(from)){
+                            List<String> toUsers = new ArrayList<>();
+                            toUsers.add(to);
+                            likeMap.put(from, toUsers);
+                        }else{
+                            likeMap.get(from).add(to);
+                        }
+                    } else {
+                        System.out.println("No info found for user: " + userSnapshot.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error reading users: " + databaseError.getCode());
+            }
+        });
+        return likeMap;
+    }
+
     @Scheduled(fixedRate = 2000)
     public void sendNewMessageNotification() {
         System.out.println("New message");
         Map<String, String> userMap = new HashMap<>();
         DatabaseReference usersRef = firebaseDatabase.getReference("chat");
-        System.out.println(usersRef.toString());
+        //System.out.println(usersRef.toString());
 
         DatabaseReference userList = firebaseDatabase.getReference("Users");
-        System.out.println(userList.toString());
+        //System.out.println(userList.toString());
 
         userList.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -158,9 +210,9 @@ public class NotificationService {
                                 @Override
                                 public void onDataChange(DataSnapshot receiveMessageTime) {
                                     String receiveDate = receiveMessageTime.getValue(String.class);
-                                    System.out.println("to: " + to);
+/*                                    System.out.println("to: " + to);
                                     System.out.println("date: " + receiveDate);
-                                    System.out.println("seconds: " + calculateSecondsUntil(receiveDate));
+                                    System.out.println("seconds: " + calculateSecondsUntil(receiveDate));*/
                                     if (calculateSecondsUntil(receiveDate) < 10 && userMap.containsKey(to)) {
                                         Message message = Message.builder()
                                                 .setToken(userMap.get(to))
@@ -174,7 +226,7 @@ public class NotificationService {
 
                                         try {
                                             firebaseMessaging.send(message);
-                                            System.out.println("Notification sent to: " + to);
+                                            //System.out.println("Notification sent to: " + to);
                                         } catch (FirebaseMessagingException e) {
                                             e.printStackTrace();
                                             System.err.println("Log error: " + e.getMessage());
@@ -190,10 +242,10 @@ public class NotificationService {
                                 }
                             });
                         } else {
-                            System.out.println("No message found for: " + userSnapshot.getKey());
+                           // System.out.println("No message found for: " + userSnapshot.getKey());
                         }
                     } else {
-                        System.out.println("No message found for: " + userSnapshot.getKey());
+                        //System.out.println("No message found for: " + userSnapshot.getKey());
                     }
                 }
             }
@@ -202,6 +254,35 @@ public class NotificationService {
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Error reading users: " + databaseError.getCode());
             }
+        });
+    }
+
+    @Scheduled(fixedRate = 86400000)
+    public void superLike() {
+        Map<String, String>userMap = getUserList();
+        Map<String, List<String>>likeMap = getSuperLikeList();
+        likeMap.forEach((key, value) -> {
+            value.forEach(to -> {
+                Message message = Message.builder()
+                        .setToken(userMap.get(to))
+                        .setNotification(Notification.builder()
+                                .setTitle("SUPER LIKE")
+                                .setBody("ĐÃ CÓ MỘT NGƯỜI GỬI SIÊU THÍCH ĐẾN CHO BẠN, HÃY TÌM HIỂU NÀO")
+                                .build())
+                        .putData("title", "SUPER LIKE")
+                        .putData("body", "ĐÃ CÓ MỘT NGƯỜI GỬI SIÊU THÍCH ĐẾN CHO BẠN, HÃY TÌM HIỂU NÀO")
+                        .build();
+
+                // Send the notification
+                try {
+                    firebaseMessaging.send(message);
+                    //System.out.println("Notification sent to: " + to);
+                } catch (FirebaseMessagingException e) {
+                    e.printStackTrace();
+                    System.err.println("Log error: " + e.getMessage());
+                    System.err.println("Failed to send notification to: " + to);
+                }
+            });
         });
     }
 
